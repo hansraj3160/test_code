@@ -32,16 +32,49 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  
+   bool isLoading=false;
+
+   setLoader(bool loading){
+    setState(() {
+      isLoading=loading;
+    });
+   }
+    @override
+    void initState() {
+initStateCall();
+      super.initState(); 
+    }
+
+    initStateCall(){
+      setLoader(true);
+      Future.delayed(Duration(seconds: 3)).then((value) {
+        print("init State Call ");
+        setLoader(false);
+      },);
+      
+    }
+    @override
+  void dispose() {
+    print("dispose Call ");
+    super.dispose();
+  }
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    print("Build context call");
     return GetMaterialApp(
         title: 'Flutter Demo',
         // initialRoute: AppRoutes.initial,
-       home: const TwilioSendMessage(),
+       home: isLoading ?Boxes():TwilioSendMessage(),
         theme: ThemeData(
             colorScheme: ColorScheme.fromSwatch().copyWith(
           primary: ColorConstant.gray51,
